@@ -1,0 +1,30 @@
+# Node.js dependencies
+node_modules/
+server/node_modules/
+client/node_modules/
+
+
+
+# Logs
+logs/
+*.log
+
+# Docker
+.env
+*.env
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Build directories
+dist/
+build/
+
+# NPM debug files
+npm-debug.log*
+
+# IDE configurations
+.idea/
+.vscode/
+*.swp

@@ -1,0 +1,12 @@
+{
+    "name": "my-gantt-app",
+    "version": "1.0.0",
+    "private": true,
+    "scripts": {
+      "start": "concurrently \"npm start --prefix client\" \"node server/server.js\""
+    },
+    "devDependencies": {
+      "concurrently": "^7.0.0"
+    }
+  }
+  
