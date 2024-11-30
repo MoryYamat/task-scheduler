@@ -58,6 +58,8 @@ TC = sum(TC(x)) [x: 0~n]
 ### Task Dependencies
 __PERT diagram__
 
+Automatically generate recommended PERT charts and provide suggestions for easy improvements
+
 
 #### <span style= "color: green;">Items related to Daily Life</span>
 * meal
