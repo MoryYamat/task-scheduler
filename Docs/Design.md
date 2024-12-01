@@ -19,7 +19,7 @@ This is like __Task__-Oriented Scheduling.
 
 ## ↕ Task Design ↕
 ### Task variables
-* From when to when
+* period
 * Where to do it
 * What to do
 * What for (task attribute)
@@ -54,5 +54,4 @@ graph TD
     Layout --> Dashboard[dashboard page]
     Layout --> project[project page]
     Layout --> shcedule[schedule page]
-
 ```
