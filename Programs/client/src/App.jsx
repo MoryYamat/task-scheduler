@@ -1,14 +1,14 @@
-import logo from './logo.svg';
+//import logo from './logo.svg';
 import './App.css';
 
-import {RouterProvider} from 'react-router-dom'
-
-// project import
-import router from './Routes/index'
+//import project
+import CoreFeature from './core-feature/index';
 
 //mui import
+import Box from '@mui/material/Box';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
+
 
 const darkTheme = createTheme({
   palette: {
@@ -19,14 +19,16 @@ const darkTheme = createTheme({
 
 
 
-function App() {
+export default function App() {
 
   return (
     <ThemeProvider theme={darkTheme}>
       <CssBaseline />
-    <RouterProvider router={router} />
+      <Box>
+
+        {/*コア機能*/}
+        <CoreFeature />
+      </Box>
     </ThemeProvider>
   );
 }
-
-export default App;
