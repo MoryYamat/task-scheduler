@@ -1,7 +1,9 @@
 //import logo from './logo.svg';
 import './App.css';
 
-//import project
+//project import 
+//import ProjectEditingFeature from './core-feature/projectEditingFeature/index';
+//import TaskEditingFeature from './core-feature/taskEditingFeature/index';
 import CoreFeature from './core-feature/index';
 
 //mui import
@@ -28,6 +30,8 @@ export default function App() {
 
         {/*コア機能*/}
         <CoreFeature />
+        {/* <ProjectEditingFeature />
+        <TaskEditingFeature /> */}
       </Box>
     </ThemeProvider>
   );
