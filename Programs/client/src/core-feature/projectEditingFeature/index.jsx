@@ -153,18 +153,19 @@ export default function ProjectEditing() {
         // console.log(`submitted End Date: ${endDate?.format('YYYY-MM-DD')}`);
 
 
+        // data aggregation (データ集約)
         const Data = {
             projectName,
             projectTypeName,
-            startDate,
-            endDate,
+            // startDate,
+            // endDate,
         };
 
         console.log(JSON.stringify(Data));
 
         try{
             const response = await fetch('http://localhost:3001/api/projects', {
-                method: 'POST',
+                method: 'POST',// 
                 headers: {
                     "Content-Type" : "application/json"
                 },
