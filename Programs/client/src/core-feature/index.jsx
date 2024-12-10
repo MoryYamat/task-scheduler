@@ -16,15 +16,26 @@ import SideBar from './sideBar/index';
 export default function CoreFeature() {
 
     return (
-        <Box>
+        <Box
+            sx={{
+                display: 'flex'
+            }}
+        >
             <SideBar />
-            <ProjectEditingFeature />
-            <Divider />
-            <TaskEditingFeature />
-            <Divider />
-            <ScheduleEditFeature />
-            <Divider />
-            <PlotData />
+            <Box
+                sx={{
+                    width: '100%'
+                }}
+            >
+                {/* <ProjectEditingFeature />
+                <Divider />
+                <TaskEditingFeature />
+                <Divider />
+                <ScheduleEditFeature />
+                <Divider />
+                <PlotData /> */}
+            </Box>
+
         </Box>
     )
 }

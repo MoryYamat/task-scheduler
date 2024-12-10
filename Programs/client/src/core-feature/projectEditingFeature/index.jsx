@@ -1,9 +1,13 @@
 import * as react from 'react';
 
+import { useState } from 'react';
+
 //mui import
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
+
+//import FormControl from '@mui/material/FormControl';
 
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -19,35 +23,39 @@ import BasicSelect from '../component/basicSelect';
 
 
 // setting project period
-function BasicDatePicker({ label }) {
+function BasicDatePicker({ label, onChange }) {
+    const [dateValue, setDateValue] = useState();
+
+    const handleChange = (newValue) => {
+        setDateValue(newValue); // newValue は dayjs オブジェクト
+        //console.log(`date: ${newValue}`);
+        onChange(newValue);// 親コンポーネントに dayjs オブジェクトを渡す
+    }
+
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DemoContainer components={['DatePicker']}>
-                <DatePicker label={label} />
+                <DatePicker
+                    label={label}
+                    value={dateValue}
+                    onChange={handleChange}
+                />
             </DemoContainer>
         </LocalizationProvider>
     );
 };
 
 // Project Data
-const projectData = [
-    {
-        name: 'the first project',
-        id: 1,
-        type: 'Dev',
-        startDate: 2020,
-        endDate: 2021,
-        progressionRate: 50,// calc
-    },
-    {
-        name: 'the gameDev',
-        id: 2,
-        type: 'Dev',
-        startDate: 2020,
-        endDate: 2021,
-        progressionRate: 50,
-    },
-]
+function SetProjectData({ props }) {
+    let projectData = [
+        {
+            name: props.name,
+            projectType: props.ProjectType,
+            startDate: props.startDate,
+            endDate: props.endDate,
+        },
+    ];
+};
 
 // Project Type Data
 const projectType = [
@@ -69,6 +77,7 @@ const projectType = [
 
 // Project Editing Feature
 function Core({ props }) {
+
     return (
 
         <Box
@@ -82,11 +91,11 @@ function Core({ props }) {
             noValidate
             autoCompolete="off"
         >
-            <TextField
+            {/* <TextField
                 id="ProjectName"
                 label="Project Name"
                 variant="outlined"
-            />
+            /> */}
             <BasicSelect
                 name="Project Type"
                 props={props}
@@ -95,9 +104,90 @@ function Core({ props }) {
         </Box>
 
     );
-}
+};
 
+
+
+
+// edit project propeties
 export default function ProjectEditing() {
+
+    const [projectName, setProjectName] =  useState('');
+    const [projectTypeId, setProjectTypeId] = useState('');
+    const [projectTypeName, setProjectTypeName] = useState('');
+    const [startDate, setStartDate] = useState();
+    const [endDate, setEndDate] = useState();
+
+
+
+
+    const handleSelectChange = (value) => {
+        setProjectTypeName(value);
+        //console.log(`selected ${value}`);
+    }
+
+    const handleStartDateChange = (value) => {
+        setStartDate(value);
+        //console.log(`startDate: ${value}`);
+    }
+
+    const handleEndDateChange = (value) => {
+        setEndDate(value);
+        //console.log(`endDate: ${value}`);
+    }
+
+    // Converting Data to an Array
+    //const Data = [projectName, projectTypeName];
+
+    //Converting data to JSON
+
+
+
+    // executed when submitted
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        console.log(`submitted Project Name: ${projectName}`);
+        console.log(`submitted Type Name: ${projectTypeName}`);
+        console.log(`submitted Type Id: ${projectTypeId}`);
+        // console.log(`submitted Start Date: ${startDate?.format('YYYY-MM-DD')}`);
+        // console.log(`submitted End Date: ${endDate?.format('YYYY-MM-DD')}`);
+
+
+        const Data = {
+            projectName,
+            projectTypeName,
+            startDate,
+            endDate,
+        };
+
+        console.log(JSON.stringify(Data));
+
+        try{
+            const response = await fetch('http://localhost:3001/api/projects', {
+                method: 'POST',
+                headers: {
+                    "Content-Type" : "application/json"
+                },
+                body: JSON.stringify(Data),
+            });
+            if (response.ok) {
+                const result = await response.json();
+                console.log("Success:", result);
+                alert("Project submitted successfully!");    
+            } else {
+                console.error("Error:", response.statusText);
+                alert("Failed to submit project.");
+            }
+        } catch (error) {
+            console.error("Network Error: ", error);
+            alert("An error occurred while sending data.");
+        }
+
+    };
+
+
+
+
     return (
         <Box
             sx={{
@@ -115,38 +205,77 @@ export default function ProjectEditing() {
                     PROJECT EDIT
                 </Box>
             </Typography>
-            <Box
-                sx={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',                    
-                }}>
-                <Core props={projectType} />
-            </Box>
-            <Box
-                sx={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                }}>
-                <BasicDatePicker label="START DATE" />
-                <Typography>
-                    <Box sx={{mx: 2}}>━</Box>
-                </Typography>
-                <BasicDatePicker label="END DATE" />
-            </Box>
 
-            <Box 
-                sx={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    mt: 2,
-                    mb: 2
-                }}
-            >
-            <Button variant="contained">DONE</Button>
-            </Box>
+            <form onSubmit={handleSubmit}>
+                <Box
+                    sx={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        my: 1,
+                    }}>
+
+                    {/* Input Project Name */}
+                    <TextField
+                        id="Input-Project-Name"
+                        label="Input-Project-Name"
+                        variant="outlined"
+                        onChange={(event) => {
+                            setProjectName(event.target.value);
+                            //console.log(projectName);
+                        }}
+                        required
+                    />
+                </Box>
+                <Box
+                    sx={{
+                        m: 1,
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                    }}>
+
+                    <BasicSelect
+                        name='Project-Type'
+                        props={projectType}
+                        // Nested callback functions
+                        onChange={handleSelectChange}
+                    />
+
+                    {/* <Core props={projectType} /> */}
+                </Box>
+                <Box
+                    sx={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                    }}>
+                    <BasicDatePicker
+                        label="START DATE"
+                        onChange={handleStartDateChange}
+                    />
+                    <Typography>
+                        <Box sx={{ mx: 2 }}>━</Box>
+                    </Typography>
+                    <BasicDatePicker
+                        label="END DATE"
+                        onChange={handleEndDateChange}
+                    />
+                </Box>
+
+                <Box
+                    sx={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        mt: 2,
+                        mb: 2
+                    }}
+                >
+                    <Button variant="contained" type="submit">Submit</Button>
+                </Box>
+            </form>
+
         </Box>
 
     );

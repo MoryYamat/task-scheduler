@@ -117,7 +117,7 @@ const periodProps = [
 // Task Editing Screen
 export default function CoreFeature() {
     return (
-        <>
+        <Box>
             <Typography>
                 <Box
                     sx={{
@@ -140,6 +140,6 @@ export default function CoreFeature() {
                 <BasicSelect name={"Period"} props={periodProps} />
 
             </Box>
-        </>
+        </Box>
     );
 }
