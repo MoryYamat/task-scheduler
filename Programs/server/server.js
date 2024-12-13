@@ -1,50 +1,54 @@
-// const express = require('express');
-// const cors = require('cors');
-
-// const app = express();
-// app.use(cors());
-// app.use(express.json());
-
-// const tasks = [
-//     { id: 1, name: "Task 1", start: "2024-11-01", end: "2024-11-10" },
-//     { id: 2, name: "Task 2", start: "2024-11-05", end: "2024-11-15" },
-// ];
-
-// app.get('/api/tasks', (req, res) => {
-//     res.json(tasks);
-// });
-
-// const PORT = 3001;
-// app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-
 const express = require("express");
 const app = express();
 const port = 3001;
+
+let projectData = 
+[
+    {
+        "name": "first project",
+        "projectTypeName": "Design and Development"
+    },
+    {
+        "name": "seconde project",
+        "projectTypeName": "fire fighter"
+    }
+];
+
+//let  projectData;
 
 const cors = require('cors'); // corsモジュールをインポート
 app.use(cors()); // 全てのオリジンを許可
 
 app.use(express.json()); // JSONパーサー
 
+// GET /api/projects
+app.get("/api/projects", (req, res) => {
+    res.json(projectData);
+    //console.log("projectData has sendedsuccessfully!");
+});
+
 // POST /api/projects エンドポイント
 app.post("/api/projects", (req, res) => {
-    console.log("Received data:", req.body); // クライアントからのデータをログに表示
+    console.log("Received project data:", req.body); // クライアントからのデータをログに表示
+    if(!Array.isArray(req.body)){
+        req.body = [req.body];
+    }
+    projectData = [...projectData, ...req.body];
+    console.log(projectData);
     res.status(200).json({ message: "Project received successfully!" }); // 成功レスポンスを返す
+    console.log(typeof(projectData));
+});
+
+// POST /api/tasks エンドポイント
+app.post("/api/tasks", (req, res) => {
+    console.log("Received task data:", req.body);
+    if(!Array.isArray(req.body)) {
+        req.body = [req.body];
+    }
+    res.status(200).json({message: "Task received successfully!"});
 });
 
 app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);
 });
 
-
-// http sereves
-// const http = require('http');
-// const server = http.createServer((req,res) => {
-//     res.statusCode = 200;
-//     res.setHeader('Const-Type', 'text/plain');
-//     res.end('Hello, world!\n');
-// });
-
-// server.listen(PORT, () => {
-//     console.log(`Server running at http://localhost:${PORT}/`);
-// });
