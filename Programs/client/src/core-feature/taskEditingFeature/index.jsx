@@ -14,10 +14,22 @@ import Select from '@mui/material/Select';
 import Typography from '@mui/material/Typography';
 
 import Button from '@mui/material/Button';
+import Stack from '@mui/material/Stack';
+import List from '@mui/material/List';
+
+import { styled } from '@mui/material/styles';
+import Paper from '@mui/material/Paper';
+
+
+// mui for Do-list input
+import TextField from '@mui/material/TextField';
+import ListItemText from '@mui/material/ListItemText';
 
 
 // project import
 //import BasicSelect from '../component/basicSelect';
+
+
 
 // temporary project data
 const projectProps = [
@@ -60,25 +72,11 @@ const projectPropsJSON = `
 ]
 `;
 
-let projectData = [];
 
-//Varies by project type
-const taskProps = [
-    {
-        name: "design",
-        ID: 1,
-    },
-    {
-        name: "implementation",
-        ID: 2,
-    },
-    {
-        name: "test",
-        ID: 3,
-    },
-];
 
+//The content displayed changes depending on the "ProjectType", which is a project variable.
 const processProps = [
+    //This list is an example of design and development.
     {
         name: "Plan",
         ID: 1,
@@ -150,6 +148,7 @@ function ProjectNameSelect({ name, props, onChange }) {
                     value={projectName}
                     label={name}
                     onChange={handleChange}
+                    required
                 >
                     {/* Display elements as many as the number of items */}
                     {
@@ -234,6 +233,7 @@ function ProcessSelect({ name, props, onChange }) {
                     value={projectName}
                     label={name}
                     onChange={handleChange}
+                    required
                 >
                     {/* Display elements as many as the number of items */}
                     {
@@ -272,15 +272,21 @@ export default function CoreFeature() {
     const [attribute, setAttribute] = useState('');
     const [process, setProcess] = useState('');
 
+    const [doText, setDoText] = useState('');
+    const [toDo, setToDo] = useState([]);
+
+    let i = 0;
+
     const handleChange = (value) => {
         setSelectedData(value);
         console.log(`set project props: ${projectProps}`);
     };
 
-    const attChange = (value) => {
-        setAttribute(value);
-        console.log(`set attribute is : ${attribute}`);
-    }
+
+    // const attChange = (value) => {
+    //     setAttribute(value);
+    //     console.log(`set attribute is : ${attribute}`);
+    // }
 
     const processChange = (value) => {
         setProcess(value);
@@ -325,9 +331,9 @@ export default function CoreFeature() {
         const data = {
             name: selectedData,
             // attribute: attribute,
-            process: process
+            process: process,
+            toDoList: toDo
         }
-
 
         try {
             const response = await fetch('http://localhost:3001/api/tasks', {
@@ -337,10 +343,10 @@ export default function CoreFeature() {
                 },
                 body: JSON.stringify(data)
             })
-            if(response.ok){
+            if (response.ok) {
                 const result = await response.json();
                 console.log("Success:", result);
-                alert("Task submitted successfully!");    
+                alert("Task submitted successfully!");
             } else {
                 console.error("Error:", response.statusText);
                 alert("Failed to submit project.");
@@ -353,10 +359,29 @@ export default function CoreFeature() {
 
 
         console.log(data);
-        
+
     }
 
-    //
+    // Do-List Adder
+    const handleClick = () => {
+        console.log(doText);
+        const textdata = {
+            description: doText
+        };
+
+        setToDo([...toDo, textdata]);
+        //console.log(toDo);
+        console.log(Array.isArray(toDo)); // true
+    };
+
+    useEffect(() => {
+        console.log(toDo);
+
+    }, [toDo])
+
+
+
+    //return
     return isLoading ? (<p>Now Loading</p>) : (
         <Box>
             <Typography>
@@ -376,8 +401,6 @@ export default function CoreFeature() {
                     <Box sx={{
                         display: 'flex',
                         justifyContent: 'center',
-
-
                     }}>
 
                         <ProjectNameSelect
@@ -400,16 +423,67 @@ export default function CoreFeature() {
 
                     </Box>
                     <Box
-                    sx={{
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        mt: 2,
-                        mb: 2
-                    }}
-                >
-                    <Button variant="contained" type="submit">Submit</Button>
-                </Box>
+                        sx={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            mt: 2,
+                            mb: 2
+                        }}
+                    >
+                        <TextField
+                            label="Do List"
+                            onChange={(event) => {
+                                setDoText(event.target.value);
+                                //console.log(doText);
+                            }}
+                        />
+                        <Button
+                            variant="contained"
+                            onClick={handleClick}
+                            sx={{
+                                ml: 2
+                            }}
+                        >
+                            add
+                        </Button>
+
+
+                    </Box>
+
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            mt: 2,
+                            mb: 2
+                        }}
+                    >
+                        <Stack>
+                            <List>
+                                {
+                                    toDo.map((item, index) => (
+                                        <ListItemText
+                                            key={index}
+                                        >{item.description}</ListItemText>
+                                    ))
+                                }
+                            </List>
+                        </Stack>
+                    </Box>
+
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            mt: 2,
+                            mb: 2
+                        }}
+                    >
+                        <Button variant="contained" type="submit">Submit</Button>
+                    </Box>
 
                 </Box>
 

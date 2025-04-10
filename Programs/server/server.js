@@ -4,14 +4,14 @@ const port = 3001;
 
 let projectData = 
 [
-    {
-        "name": "first project",
-        "projectTypeName": "Design and Development"
-    },
-    {
-        "name": "seconde project",
-        "projectTypeName": "fire fighter"
-    }
+    // {
+    //     "name": "first project",
+    //     "projectTypeName": "Design and Development"
+    // },
+    // {
+    //     "name": "seconde project",
+    //     "projectTypeName": "fire fighter"
+    // }
 ];
 
 //let  projectData;
